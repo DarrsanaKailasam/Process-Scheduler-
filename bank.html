@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Banker's Algorithm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            width: 50px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #resources {
+            margin-top: 20px;
+        }
+
+        #output {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        #output h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Banker's Algorithm Simulation</h1>
+    <label for="numProcesses">Number of Processes:</label>
+    <input type="number" id="numProcesses">
+    <label for="numResources">Number of Resources:</label>
+    <input type="number" id="numResources">
+    <br>
+    <button onclick="initSimulation()">Initialize</button>
+    <br>
+    <div id="resources">
+        <!-- Resource allocation and maximum claim inputs will be generated here -->
+    </div>
+    <button onclick="computeSafeSequence()">Compute Safe Sequence</button>
+    <br>
+    <div id="output">
+        <!-- Output messages will be displayed here -->
+    </div>
+
+    <script>
+        let numProcessesInput = document.getElementById("numProcesses");
+        let numResourcesInput = document.getElementById("numResources");
+        let resourcesDiv = document.getElementById("resources");
+        let outputDiv = document.getElementById("output");
+
+        let numProcesses;
+        let numResources;
+        let allocation = [];
+        let maxClaim = [];
+        let available = [];
+        let need = [];
+
+        function initSimulation() {
+            numProcesses = parseInt(numProcessesInput.value);
+            numResources = parseInt(numResourcesInput.value);
+
+            // Create input fields for resource allocation and maximum claim
+            resourcesDiv.innerHTML = "";
+            allocation = [];
+            maxClaim = [];
+            for (let i = 0; i < numProcesses; i++) {
+                allocation[i] = [];
+                maxClaim[i] = [];
+                need[i] = [];
+                for (let j = 0; j < numResources; j++) {
+                    allocation[i][j] = 0;
+                    maxClaim[i][j] = 0;
+                    need[i][j] = 0;
+
+                    const allocationInput = document.createElement("input");
+                    allocationInput.setAttribute("type", "number");
+                    allocationInput.setAttribute("placeholder", `P${i + 1} R${j + 1}`);
+                    allocationInput.id = `allocation-${i}-${j}`;
+
+                    const maxClaimInput = document.createElement("input");
+                    maxClaimInput.setAttribute("type", "number");
+                    maxClaimInput.setAttribute("placeholder", `P${i + 1} R${j + 1}`);
+                    maxClaimInput.id = `max-claim-${i}-${j}`;
+
+                    resourcesDiv.appendChild(allocationInput);
+                    resourcesDiv.appendChild(maxClaimInput);
+                }
+                resourcesDiv.appendChild(document.createElement("br"));
+            }
+
+            // Create input field for available resources
+            available = [];
+            for (let j = 0; j < numResources; j++) {
+                available[j] = 0;
+                const availableInput = document.createElement("input");
+                availableInput.setAttribute("type", "number");
+                availableInput.setAttribute("placeholder", `Available R${j + 1}`);
+                availableInput.id = `available-${j}`;
+                resourcesDiv.appendChild(availableInput);
+            }
+            resourcesDiv.appendChild(document.createElement("br"));
+
+            outputDiv.innerHTML = "<p>Simulation initialized.</p>";
+        }
+
+        function computeSafeSequence() {
+            const safeSeq = findSafeSequence();
+            if (safeSeq) {
+                outputDiv.innerHTML = `<h2>Safe Sequence:</h2><p>${safeSeq.join(" -> ")}</p>`;
+            } else {
+                outputDiv.innerHTML = "<p>No safe sequence found.</p>";
+            }
+        }
+
+function findSafeSequence() {
+    const work = [...available];
+    const finish = Array(numProcesses).fill(false);
+    const safeSeq = [];
+
+    for (let step = 0; step < numProcesses; step++) {
+        for (let i = 0; i < numProcesses; i++) {
+            if (!finish[i]) {
+                let canAllocate = true;
+                for (let j = 0; j < numResources; j++) {
+                    if (need[i][j] > work[j]) {
+                        canAllocate = false;
+                        break;
+                    }
+                }
+
+                if (canAllocate) {
+                    for (let j = 0; j < numResources; j++) {
+                        work[j] += allocation[i][j];
+                    }
+                    finish[i] = true;
+                    safeSeq.push(i);
+                }
+            }
+        }
+    }
+
+    if (safeSeq.length === numProcesses) {
+        return safeSeq;
+    } else {
+        return null; // No safe sequence exists
+    }
+}
+
+function isSafeState() {
+    const safeSeq = findSafeSequence();
+    return safeSeq !== null;
+}
+
+
+       
+    </script>
+</body>
+</html>

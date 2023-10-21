@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scheduling Algorithm Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+        label, input, select {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Scheduling Algorithm Visualization</h1>
+        <form method="post">
+            <label for="algorithm">Select Algorithm:</label>
+            <select name="algorithm">
+                <option value="fcfs">First-Come, First-Served</option>
+                <option value="sjf">Shortest Job First</option>
+                <option value="srtf">Shortest Remaining Time First</option>
+                <option value="round_robin">Round Robin</option>
+                <option value="non_preemptive_priority">Non-preemptive Priority</option>
+                <option value="preemptive_priority">Preemptive Priority</option>
+            </select>
+            <label for="arrival_times">Arrival Times:</label>
+            <input type="text" name="arrival_times" placeholder="0,0,0,0,0" required>
+            <label for="burst_times">Burst Times:</label>
+            <input type="text" name="burst_times" placeholder="0,0,0,0,0" required>
+            <label for="priorities">Priorities:</label>
+            <input type="text" name="priorities" placeholder="0,0,0,0,0" required>
+            <label for="time_quantum">Time Quantum (for Round Robin):</label>
+            <input type="text" name="time_quantum" placeholder="0" required>
+            <input type="submit" value="Generate">
+        </form>
+    </div>
+</body>
+</html>

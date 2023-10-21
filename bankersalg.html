@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Banker's Algorithm</title>
+    <style>
+          body {
+            font-family: Arial, sans-serif;
+            background-color: #C0C0C0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            background-color: #696969;
+            color: #fff;
+            padding: 20px 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        p {
+            text-align: center;
+            color: #333;
+        }
+
+        input[type="number"] {
+            width: 50px;
+            padding: 5px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table, th, td {
+            border: 1px solid #808080;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #696969;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #inputMatrix, #output {
+            margin-top: 20px;
+        }
+
+        #safeSequence {
+            font-weight: bold;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Banker's Algorithm Simulation</h1>
+    <p>Enter the number of processes and resources:</p>
+    <input type="number" id="numProcesses" placeholder="Number of Processes">
+    <input type="number" id="numResources" placeholder="Number of Resources">
+    <button onclick="init()">Initialize</button>
+
+    <div id="inputMatrix" style="display: none;">
+        <h2>Enter Allocation Matrix:</h2>
+        <table id="allocationTable"></table>
+
+        <h2>Enter Maximum Matrix:</h2>
+        <table id="maxTable"></table>
+
+        <h2>Enter Available Resources:</h2>
+        <table id="availableTable"></table>
+        <button onclick="runBankers()">Run Banker's Algorithm</button>
+    </div>
+
+    <div id="output" style="display: none;">
+        <h2>Safe Sequence:</h2>
+        <p id="safeSequence"></p>
+
+        <h2>Result:</h2>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        let numProcesses, numResources, allocationMatrix, maxMatrix, availableResources;
+
+        function init() {
+            numProcesses = parseInt(document.getElementById("numProcesses").value);
+            numResources = parseInt(document.getElementById("numResources").value);
+
+            // Create input fields for allocation matrix
+            const allocationTable = document.getElementById("allocationTable");
+            allocationTable.innerHTML = "";
+            for (let i = 0; i < numProcesses; i++) {
+                const row = allocationTable.insertRow();
+                for (let j = 0; j < numResources; j++) {
+                    const cell = row.insertCell();
+                    const input = document.createElement("input");
+                    input.type = "number";
+                    input.placeholder = `P${i} R${j}`;
+                    cell.appendChild(input);
+                }
+            }
+
+            // Create input fields for maximum matrix
+            const maxTable = document.getElementById("maxTable");
+            maxTable.innerHTML = "";
+            for (let i = 0; i < numProcesses; i++) {
+                const row = maxTable.insertRow();
+                for (let j = 0; j < numResources; j++) {
+                    const cell = row.insertCell();
+                    const input = document.createElement("input");
+                    input.type = "number";
+                    input.placeholder = `P${i} R${j}`;
+                    cell.appendChild(input);
+                }
+            }
+
+            // Create input fields for available resources
+            const availableTable = document.getElementById("availableTable");
+            availableTable.innerHTML = "";
+            const row = availableTable.insertRow();
+            for (let j = 0; j < numResources; j++) {
+                const cell = row.insertCell();
+                const input = document.createElement("input");
+                input.type = "number";
+                input.placeholder = `R${j}`;
+                cell.appendChild(input);
+            }
+
+            // Show the input matrix section
+            document.getElementById("inputMatrix").style.display = "block";
+        }
+
+        function runBankers() {
+            // Parse input matrices and available resources
+            allocationMatrix = [];
+            maxMatrix = [];
+            availableResources = [];
+            for (let i = 0; i < numProcesses; i++) {
+                const allocationRow = [];
+                const maxRow = [];
+                for (let j = 0; j < numResources; j++) {
+                    const allocationValue = parseInt(document.querySelector(`#allocationTable tr:nth-child(${i + 1}) td:nth-child(${j + 1}) input`).value);
+                    const maxValue = parseInt(document.querySelector(`#maxTable tr:nth-child(${i + 1}) td:nth-child(${j + 1}) input`).value);
+                    allocationRow.push(allocationValue);
+                    maxRow.push(maxValue);
+                }
+                allocationMatrix.push(allocationRow);
+                maxMatrix.push(maxRow);
+            }
+
+            for (let j = 0; j < numResources; j++) {
+                const availableValue = parseInt(document.querySelector(`#availableTable tr:first-child td:nth-child(${j + 1}) input`).value);
+                availableResources.push(availableValue);
+            }
+
+            // Implement Banker's Algorithm logic
+            const safeSequence = [];
+            const work = [...availableResources];
+            const finish = new Array(numProcesses).fill(false);
+
+            for (let i = 0; i < numProcesses; i++) {
+                if (!finish[i]) {
+                    let canAllocate = true;
+                    for (let j = 0; j < numResources; j++) {
+                        if (maxMatrix[i][j] - allocationMatrix[i][j] > work[j]) {
+                            canAllocate = false;
+                            break;
+                        }
+                    }
+
+                    if (canAllocate) {
+                        for (let j = 0; j < numResources; j++) {
+                            work[j] += allocationMatrix[i][j];
+                        }
+                        finish[i] = true;
+                        safeSequence.push(i);
+                        i = -1; // Start from the beginning
+                    }
+                }
+            }
+
+            // Display results
+            const safeSequenceText = safeSequence.length === numProcesses ? safeSequence.join(" -> ") : "Not safe";
+            document.getElementById("safeSequence").textContent = safeSequenceText;
+
+            const resultText = safeSequence.length === numProcesses ? "The system is in a safe state." : "The system is not in a safe state.";
+            document.getElementById("result").textContent = resultText;
+
+            // Show the output section
+            document.getElementById("output").style.display = "block";
+        }
+    </script>
+</body>
+</html>

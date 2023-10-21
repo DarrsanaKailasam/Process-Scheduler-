@@ -1,0 +1,71 @@
+git add
+commit
+push
+version control
+
+
+
+DARRSANA.K@DESKTOP-Q7UB5F3 MINGW64 ~/.idlerc/Desktop/git (master)
+$ git init
+Initialized empty Git repository in C:/Users/DARRSANA.K/.idlerc/Desktop/git/.git/
+
+DARRSANA.K@DESKTOP-Q7UB5F3 MINGW64 ~/.idlerc/Desktop/git (master)
+$ git config user.name DarrsanaKailasam
+
+DARRSANA.K@DESKTOP-Q7UB5F3 MINGW64 ~/.idlerc/Desktop/git (master)
+$ git config user.email darrsanak.21it@kongu.edu
+
+DARRSANA.K@DESKTOP-Q7UB5F3 MINGW64 ~/.idlerc/Desktop/git (master)
+$ git remote add origin https://github.com/DarrsanaKailasam/Sample.git
+
+DARRSANA.K@DESKTOP-Q7UB5F3 MINGW64 ~/.idlerc/Desktop/git (master)
+$ git pull origin main
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (3/3), 595 bytes | 54.00 KiB/s, done.
+From https://github.com/DarrsanaKailasam/Sample
+ * branch            main       -> FETCH_HEAD
+ * [new branch]      main       -> origin/main
+
+DARRSANA.K@DESKTOP-Q7UB5F3 MINGW64 ~/.idlerc/Desktop/git (master)
+$ git checkout main
+Switched to a new branch 'main'
+branch 'main' set up to track 'origin/main'.
+
+DARRSANA.K@DESKTOP-Q7UB5F3 MINGW64 ~/.idlerc/Desktop/git (main)
+$ vi file.txt
+
+DARRSANA.K@DESKTOP-Q7UB5F3 MINGW64 ~/.idlerc/Desktop/git (main)
+$
+
+DARRSANA.K@DESKTOP-Q7UB5F3 MINGW64 ~/.idlerc/Desktop/git (main)
+$ ^C
+
+DARRSANA.K@DESKTOP-Q7UB5F3 MINGW64 ~/.idlerc/Desktop/git (main)
+$ git add .
+warning: in the working copy of 'file.txt', LF will be replaced by CRLF the next time Git touches it
+
+DARRSANA.K@DESKTOP-Q7UB5F3 MINGW64 ~/.idlerc/Desktop/git (main)
+$ ^C
+
+DARRSANA.K@DESKTOP-Q7UB5F3 MINGW64 ~/.idlerc/Desktop/git (main)
+$ git commit -m "Created a new file"
+[main 23acc10] Created a new file
+ 1 file changed, 1 insertion(+)
+ create mode 100644 file.txt
+
+DARRSANA.K@DESKTOP-Q7UB5F3 MINGW64 ~/.idlerc/Desktop/git (main)
+$ ^C
+
+DARRSANA.K@DESKTOP-Q7UB5F3 MINGW64 ~/.idlerc/Desktop/git (main)
+$ git push origin main
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 293 bytes | 293.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/DarrsanaKailasam/Sample.git
+   1cbb8bc..23acc10  main -> main
+
